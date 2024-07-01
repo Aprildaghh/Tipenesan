@@ -1,0 +1,16 @@
+program Tipenesan;
+
+uses
+  Vcl.Forms,
+  mainUnit in 'mainUnit.pas' {mainForm},
+  DBModule in 'DBModule.pas' {myDataModule: TDataModule};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TmainForm, mainForm);
+  Application.CreateForm(TmyDataModule, myDataModule);
+  Application.Run;
+end.

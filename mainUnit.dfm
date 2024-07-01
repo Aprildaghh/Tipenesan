@@ -1,0 +1,173 @@
+object mainForm: TmainForm
+  Left = 0
+  Top = 0
+  BorderStyle = bsSingle
+  Caption = 'Tipenesan'
+  ClientHeight = 474
+  ClientWidth = 959
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  Position = poDesigned
+  TextHeight = 15
+  object Label1: TLabel
+    Left = 32
+    Top = 309
+    Width = 38
+    Height = 15
+    Caption = 'Search:'
+  end
+  object Label2: TLabel
+    Left = 328
+    Top = 309
+    Width = 107
+    Height = 15
+    Caption = 'Filter By Categories: '
+  end
+  object gridBox: TDBGrid
+    Left = 16
+    Top = 17
+    Width = 929
+    Height = 225
+    DataSource = DBDataModule.DBDataSource
+    Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -12
+    TitleFont.Name = 'Segoe UI'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'id'
+        ImeMode = imClose
+        ImeName = 'United Kingdom'
+        Width = 16
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'name'
+        ImeMode = imClose
+        ImeName = 'United Kingdom'
+        Width = 540
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'category'
+        ImeMode = imClose
+        ImeName = 'United Kingdom'
+        Width = 65
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'release_date'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'added_date'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'rating'
+        ImeMode = imClose
+        ImeName = 'United Kingdom'
+        Width = 40
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'finished'
+        ImeMode = imClose
+        ImeName = 'United Kingdom'
+        Width = 50
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'season'
+        ImeMode = imClose
+        ImeName = 'United Kingdom'
+        Width = 40
+        Visible = True
+      end>
+  end
+  object navigatorPanel: TDBNavigator
+    Left = 328
+    Top = 248
+    Width = 240
+    Height = 25
+    DataSource = DBDataModule.DBDataSource
+    TabOrder = 1
+  end
+  object addBtn: TButton
+    Left = 854
+    Top = 275
+    Width = 97
+    Height = 49
+    Cursor = crHandPoint
+    Caption = 'Add'
+    TabOrder = 2
+    OnClick = addBtnClick
+  end
+  object editBtn: TButton
+    Left = 854
+    Top = 346
+    Width = 97
+    Height = 49
+    Cursor = crHandPoint
+    Caption = 'Edit'
+    TabOrder = 3
+    OnClick = editBtnClick
+  end
+  object removeBtn: TButton
+    Left = 854
+    Top = 417
+    Width = 97
+    Height = 49
+    Cursor = crHandPoint
+    Caption = 'Remove'
+    TabOrder = 4
+    OnClick = removeBtnClick
+  end
+  object searchBox: TEdit
+    Left = 76
+    Top = 306
+    Width = 157
+    Height = 23
+    TabOrder = 5
+    OnKeyUp = searchBoxKeyUp
+  end
+  object categoryFilterBox: TCheckListBox
+    Left = 457
+    Top = 306
+    Width = 121
+    Height = 89
+    ItemHeight = 15
+    Items.Strings = (
+      'game'
+      'series'
+      'movie'
+      'anime'
+      'book')
+    StyleName = 'Windows'
+    TabOrder = 6
+  end
+  object categoryFilterBtn: TButton
+    Left = 481
+    Top = 417
+    Width = 97
+    Height = 49
+    Caption = 'Filter'
+    TabOrder = 7
+    OnClick = categoryFilterBtnClick
+  end
+end
