@@ -25,8 +25,10 @@ type
     procedure editBtnClick(Sender: TObject);
     procedure categoryFilterBtnClick(Sender: TObject);
     procedure removeBtnClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
+    filterByName, filterByCategory: string;
   public
     { Public declarations }
     selectedId: integer;
@@ -38,6 +40,52 @@ var
 implementation
 
 {$R *.dfm}
+
+function contains(arr: array of string ; value: string; index: integer): boolean;
+var
+  i: Integer;
+  flag: boolean;
+begin
+  flag := False;
+  for i := 0 to index do
+  begin
+    try
+      if CompareStr(arr[i], value) = 0 then
+      begin
+        flag := True;
+        break;
+      end;
+    except
+    end;
+  end;
+  Result := flag;
+end;
+
+function fillCategoryBox: integer;
+var
+  i, categoryIndex, maxIndex: integer;
+  newData: string;
+  categories: array[0..100] of string;
+begin
+
+  categoryIndex := 0;
+  maxIndex := DBDataModule.DBConn.ExecSQLScalar('select count(*) from popular_culture order by id asc');
+  for i := 0 to maxIndex-1 do
+  begin
+    newData := DBDataModule.DBConn.ExecSQLScalar('select category from popular_culture order by id asc limit 1 offset '+inttostr(i));  
+    if not contains(categories, newData, categoryIndex-1) then
+    begin
+      categories[categoryIndex] := newData;
+      inc(categoryIndex);
+    end;
+  end;
+
+  for i := 0 to categoryIndex-1 do
+  begin
+    mainForm.categoryFilterBox.Items.Add(categories[i]);
+  end;
+    
+end;
 
 procedure TmainForm.addBtnClick(Sender: TObject);
 begin
@@ -51,7 +99,7 @@ var
   sqlFilter: string;
 begin
   categoryIndex := 0;
-  categorySize := 5;
+  categorySize := categoryFilterBox.Items.Count;
 
   for i := 0 to categorySize - 1 do
   begin
@@ -79,7 +127,12 @@ begin
     end;
 
   end;
-  sqlFilter := 'category in (' + sqlFilter + ')';
+  filterByCategory := 'category in (' + sqlFilter + ')';
+
+  if filterByName <> '' then
+    sqlFilter := filterByName + ' and ' + filterByCategory
+  else
+    sqlFilter := filterByCategory;
 
   DBDataModule.DBTable.Filter := sqlFilter;
   DBDataModule.DBTable.Filtered := True;
@@ -90,6 +143,12 @@ procedure TmainForm.editBtnClick(Sender: TObject);
 begin
   selectedId := gridBox.SelectedField.AsInteger;
   editForm.showModal;
+end;
+
+procedure TmainForm.FormActivate(Sender: TObject);
+begin
+  fillCategoryBox;
+  categoryFilterBox.Refresh;
 end;
 
 procedure TmainForm.removeBtnClick(Sender: TObject);
@@ -104,10 +163,17 @@ end;
 procedure TmainForm.searchBoxKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
-  input:string;
+  input, filter:string;
 begin
   input := searchBox.Text;
-  DBDataModule.DBTable.Filter := 'name like ' + QuotedStr('%'+input+'%');
+  filterByName := 'name like ' + QuotedStr('%'+input+'%');
+
+  if filterByCategory <> '' then
+    filter := filterByName + ' and ' + filterByCategory
+  else
+    filter := filterByName;
+
+  DBDataModule.DBTable.Filter := filter;
   DBDataModule.DBTable.Filtered := True;
 end;
 end.

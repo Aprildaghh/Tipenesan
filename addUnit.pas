@@ -35,6 +35,17 @@ uses mainUnit, DBModule;
 
 {$R *.dfm}
 
+function clearFields():boolean;
+begin
+  addForm.nameBox.Text := '';
+  addForm.categoryBox.Text := '';
+  addForm.releaseDateBox.Date := now;
+  addForm.ratingBox.Text := '';
+  addForm.seasonBox.Text := '';
+  addForm.finishedBox.Checked := False;
+
+end;
+
 procedure TaddForm.addBtnClick(Sender: TObject);
 begin
 
@@ -52,12 +63,15 @@ begin
       DBDataModule.DBTable['season'] := seasonBox.Text;
 
     DBDataModule.DBTable.Post;
+    DBDataModule.DBTable.Refresh;
+    mainForm.gridBox.Refresh;
   end
   else
   begin
     ShowMessage('Invalid input!');
   end;
 
+  clearFields;
   self.Close;
 end;
 

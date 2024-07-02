@@ -3,8 +3,8 @@ object mainForm: TmainForm
   Top = 0
   BorderStyle = bsSingle
   Caption = 'Tipenesan'
-  ClientHeight = 474
-  ClientWidth = 959
+  ClientHeight = 472
+  ClientWidth = 960
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,6 +12,7 @@ object mainForm: TmainForm
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poDesigned
+  OnActivate = FormActivate
   TextHeight = 15
   object Label1: TLabel
     Left = 32
@@ -152,12 +153,6 @@ object mainForm: TmainForm
     Width = 121
     Height = 89
     ItemHeight = 15
-    Items.Strings = (
-      'game'
-      'series'
-      'movie'
-      'anime'
-      'book')
     StyleName = 'Windows'
     TabOrder = 6
   end

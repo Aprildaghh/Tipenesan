@@ -37,6 +37,17 @@ uses mainUnit, DBModule;
 
 {$R *.dfm}
 
+function clearFields():boolean;
+begin
+  editForm.nameBox.Text := '';
+  editForm.categoryBox.Text := '';
+  editForm.releaseDateBox.Date := now;
+  editForm.ratingBox.Text := '';
+  editForm.seasonBox.Text := '';
+  editForm.finishedBox.Checked := False;
+
+end;
+
 procedure TeditForm.addBtnClick(Sender: TObject);
 begin
   if (Length(nameBox.Text) <> 0) and (Length(categoryBox.Text) <> 0) and (Length(ratingBox.Text) <> 0) then
@@ -49,16 +60,23 @@ begin
     DBDataModule.DBTable['release_date'] := releaseDateBox.Date;
     DBDataModule.DBTable['rating'] := ratingBox.Text;
     DBDataModule.DBTable['finished'] := finishedBox.Checked;
-    if seasonBox.Text <> '' then
-      DBDataModule.DBTable['season'] := seasonBox.Text;
+    try
+      if seasonBox.Text <> '' then
+        DBDataModule.DBTable['season'] := seasonBox.Text;
+
+    except
+    end;
 
     DBDataModule.DBTable.Post;
+    DBDataModule.DBTable.Refresh;
+    mainForm.gridBox.Refresh;
   end
   else
   begin
     ShowMessage('Invalid input!');
   end;
 
+  clearFields;
   self.Close;
 end;
 
@@ -66,14 +84,12 @@ procedure TeditForm.FormActivate(Sender: TObject);
 var
 i : integer;
 begin
-
-  showmessage(DBDataModule.DBConn.ExecSQLScalar('select name from popular_culture where id = '+inttostr(mainForm.selectedId)));
-
   nameBox.Text := DBDataModule.DBConn.ExecSQLScalar('select name from popular_culture where id = '+inttostr(mainForm.selectedId));
   categoryBox.Text := DBDataModule.DBConn.ExecSQLScalar('select category from popular_culture where id = '+inttostr(mainForm.selectedId));
   releaseDateBox.Date := DBDataModule.DBConn.ExecSQLScalar('select release_date from popular_culture where id = '+inttostr(mainForm.selectedId));
   ratingBox.Text := DBDataModule.DBConn.ExecSQLScalar('select rating from popular_culture where id = '+inttostr(mainForm.selectedId));
-  seasonBox.Text := DBDataModule.DBConn.ExecSQLScalar('select season from popular_culture where id = '+inttostr(mainForm.selectedId));
+  if VarNull <> VarType(DBDataModule.DBConn.ExecSQLScalar('select season from popular_culture where id = '+inttostr(mainForm.selectedId))) then
+    seasonBox.Text := DBDataModule.DBConn.ExecSQLScalar('select season from popular_culture where id = '+inttostr(mainForm.selectedId));
   finishedBox.Checked := DBDataModule.DBConn.ExecSQLScalar('select finished from popular_culture where id = '+inttostr(mainForm.selectedId));
 end;
 end.
